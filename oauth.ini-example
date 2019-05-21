@@ -1,0 +1,21 @@
+[default]
+redirectUri = https://<your domain>/oauth.php
+uri = https://<your domain>/login.php
+
+[google] ; https://console.cloud.google.com
+enabled = true;
+clientId = ""
+clientSecret = ""
+scope = "https://www.googleapis.com/auth/userinfo.email"
+endpointToken = "https://www.googleapis.com/oauth2/v4/token"
+endpointScope = "https://www.googleapis.com/oauth2/v2/userinfo?fields=name,email,gender,id,picture,verified_email"
+emailIdentifier = email
+
+[microsoft] ; https://portal.azure.com
+enabled = true;
+clientId = ""
+clientSecret = ""
+scope = "https://graph.microsoft.com/user.read"
+endpointToken = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+endpointScope = "https://graph.microsoft.com/v1.0/me"
+emailIdentifier = userPrincipalName
