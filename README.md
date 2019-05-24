@@ -25,8 +25,8 @@ session_write_close();
 
 The above sets a session variable ssoEmail and then redirects the user to the main application that checks for this session variable and if set will log the user in.  You will need to edit the above code in ouath.php if your requirements are more advanced / different.
 
-To register for Google SSO go to https://console.cloud.google.com and on the left select Credentials -> Create Credentials -> OAuth client ID.  Application type is a Web Application and the Redirect URI will need to point to oauth.php in your web root i.e. https://your.comain/oauth.php.
+To register for Google SSO go to https://console.cloud.google.com and on the left select Credentials -> Create Credentials -> OAuth client ID.  Application type is a Web Application and the Redirect URI will need to point to oauth.php in your web root i.e. https://your.domain/oauth.php.
 
-To register for Microsoft SSO goto https://portal.azure.com and Azure Active Director -> App Registrations.  Make sure the redirect URI points to oauth.php in your web root i.e. https://your.comain/oauth.php
+To register for Microsoft SSO goto https://portal.azure.com and Azure Active Director -> App Registrations.  Make sure the redirect URI points to oauth.php in your web root i.e. https://your.domain/oauth.php
 
 Contributions more than welcome!
