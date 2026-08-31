@@ -1,10 +1,51 @@
 <?php
 define('CONF', '../oauth.ini'); // keep outh.ini out of the web root!
-
 $settings = parse_ini_file(CONF, TRUE);
-if(isset($_GET['code']) && isset($_GET['state']) && in_array($_GET['state'], ['microsoft', 'google']))
+session_start();
+if(isset($_GET['login']) && in_array($_GET['login'], ['microsoft', 'google'], TRUE))
 {
-	$idp = $_GET['state'];
+	$_SESSION['ssoProvider'] = $_GET['login'];
+	$_SESSION['ssoState'] = bin2hex(random_bytes(32));
+
+	switch($_GET['login'])
+	{
+		case 'google':
+		{
+			$params = [
+				'state' => $_SESSION['ssoState'],
+				'redirect_uri' => $settings['default']['redirectUri'],
+				'client_id' => $settings['google']['clientId'],
+				'scope' => $settings['google']['scope'],
+				'response_type' => 'code',
+				'access_type' => 'online'
+			];
+
+			header('Location: https://accounts.google.com/o/oauth2/auth?'.http_build_query($params));
+			exit();
+		}
+		break;
+
+		case 'microsoft':
+		{
+			$params = [
+			    'state' => $_SESSION['ssoState'],
+			    'redirect_uri' => $settings['default']['redirectUri'],
+			    'client_id' => $settings['microsoft']['clientId'],
+			    'scope' => $settings['microsoft']['scope'],
+			    'response_type' => 'code'
+			];
+
+			header('Location: https://login.microsoftonline.com/common/oauth2/v2.0/authorize?'.http_build_query($params));
+			exit();
+		}
+		break;
+	}
+}
+else if(isset($_GET['code'], $_GET['state']) && isset($_SESSION['ssoState'], $_SESSION['ssoProvider']) && hash_equals($_SESSION['ssoState'], $_GET['state']))
+{
+	$idp = $_SESSION['ssoProvider'];
+	unset($_SESSION['ssoProvider']);
+	unset($_SESSION['ssoState']);
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $settings[$idp]['endpointToken']);
@@ -37,16 +78,11 @@ if(isset($_GET['code']) && isset($_GET['state']) && in_array($_GET['state'], ['m
 		exit();
 	}
 
-	session_start();
 	$_SESSION['ssoEmail'] = $data[$settings[$idp]['emailIdentifier']];
 	header('Location: '.$settings['default']['uri']);
-	session_write_close();
+	exit();
 }
 else
 {
-
-echo 'Login with:
-<a id="login-button" href="https://accounts.google.com/o/oauth2/auth?state=google&redirect_uri='.$settings['default']['redirectUri'].'&client_id='.$settings['google']['clientId'].'&scope='.$settings['google']['scope'].'&response_type=code&access_type=online">Google</a> or
-<a id="login-button" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?state=microsoft&client_id='.$settings['microsoft']['clientId'].'&response_type=code&scope='.$settings['microsoft']['scope'].'&redirect_uri='.$settings['default']['redirectUri'].'">Microsoft</a><br/>';
-
+	echo 'Login with: <a id="login-button" href="oauth.php?login=google">Google</a> or <a id="login-button" href="oauth.php?login=microsoft">Microsoft</a><br/>';
 }
