@@ -32,7 +32,8 @@ if(isset($_GET['login']) && in_array($_GET['login'], ['microsoft', 'google'], TR
 			    'redirect_uri' => $settings['default']['redirectUri'],
 			    'client_id' => $settings['microsoft']['clientId'],
 			    'scope' => $settings['microsoft']['scope'],
-			    'response_type' => 'code'
+			    'response_type' => 'code',
+				'prompt' => 'select_account'
 			];
 
 			header('Location: https://login.microsoftonline.com/common/oauth2/v2.0/authorize?'.http_build_query($params));
