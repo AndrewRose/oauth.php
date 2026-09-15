@@ -27,6 +27,6 @@ The above sets a session variable ssoEmail and then redirects the user to the ma
 
 To register for Google SSO go to https://console.cloud.google.com and on the left select Credentials -> Create Credentials -> OAuth client ID.  Application type is a Web Application and the Redirect URI will need to point to oauth.php in your web root i.e. https://your.domain/oauth.php.
 
-To register for Microsoft SSO goto https://portal.azure.com and Azure Active Director -> App Registrations.  Make sure the redirect URI points to oauth.php in your web root i.e. https://your.domain/oauth.php
+To register for Microsoft SSO goto [entra.microsoft.com](https://entra.microsoft.com/) -> App Registrations.  Make sure: the redirect URI points to oauth.php in your web root i.e. https://your.domain/oauth.php - Supported Accounts is set to "Any Entra ID Tenant + Personal Microsoft accounts", unless you wish to restrict to your own tenant in which case configure as appropriate.
 
 Contributions more than welcome!
