@@ -1,7 +1,16 @@
 <?php
 define('CONF', '../oauth.ini'); // keep outh.ini out of the web root!
+
 $settings = parse_ini_file(CONF, TRUE);
+
+session_set_cookie_params([
+	'secure' => true,
+	'httponly' => true,
+	'samesite' => 'Lax',
+]);
+
 session_start();
+
 if(isset($_GET['login']) && in_array($_GET['login'], ['microsoft', 'google'], TRUE))
 {
 	$_SESSION['ssoProvider'] = $_GET['login'];
